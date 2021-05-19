@@ -1,0 +1,27 @@
+*{
+    font-family: '나눔고딕', '맑은 고딕', Arial, Helvetica, sans-serif;
+}
+body{
+	position:relative;
+    text-align: center;
+    height: 100%;
+    background-color: lightgreen;
+    font-family: '나눔고딕', '맑은 고딕', Arial, Helvetica, sans-serif;
+}
+section{
+    border: solid 2px black;
+}
+nav{
+	display: inline-block;
+	border: solid 1px black;
+}
+nav > ul > li{
+    display: inline-block;
+    background-color: aqua;
+    border: solid 2px 
+}
+iframe {
+	margin:0;
+	width:100%;
+	height:100%;
+}

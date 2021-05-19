@@ -1,0 +1,14 @@
+body{
+    text-align: center;
+    background-color: lightgreen;
+    font-family: '나눔고딕', '맑은 고딕', Arial, Helvetica, sans-serif;
+}
+#form {
+    background-color: lightblue;
+    display: inline-block;
+    border: solid 2px black
+}
+td {
+   text-align: center;
+            
+}

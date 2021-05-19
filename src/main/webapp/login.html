@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="css/form.css" rel="stylesheet">
+</head>
+<body>
+    <form id="form" action="login.jsp">
+        <table>
+            <thead>
+                <td colspan="2">
+                    <div id="login-title">로그인</div>
+                </td>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        ID: 
+                    </td>
+                    <td>
+                        <input type="text" id='userID'>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        PW: 
+                    </td>
+                    <td>
+                        <input type="text" id='PW'>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" name="btn" value="login">로그인</button>
+                        <button type="submit" name="btn" value="register">회원가입</button>
+                    </td> 
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</body>
+</html>
