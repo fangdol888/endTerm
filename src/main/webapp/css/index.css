@@ -13,8 +13,8 @@ section{
 }
 nav{
 	display: inline-block;
-	border: solid 1px black;
 }
+
 nav > ul > li{
     display: inline-block;
     background-color: aqua;

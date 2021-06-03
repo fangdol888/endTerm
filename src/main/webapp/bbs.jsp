@@ -3,17 +3,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<meta charset="UTF-8">
+<title>게시판 목록</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- 뷰포트 -->
 <meta name="viewport" content="width=device-width" initial-scale="1">
 <!-- 스타일시트 참조  -->
 <link rel="stylesheet" href="css/bootstrap.css">
 
-<title>로그인</title>
-
 </head>
-<body><nav class="navbar navbar-default"> <!-- 네비게이션 -->
+<body>
+
+<%
+String userID =null;
+if(session.getAttribute("userID") != null){
+	userID = (String)session.getAttribute("userID");
+}
+%>
+
+<nav class="navbar navbar-default"> <!-- 네비게이션 -->
 		<div class="navbar-header"> 	<!-- 네비게이션 상단 부분 -->
 			<!-- 네비게이션 상단 박스 영역 -->
 			<button type="button" class="navbar-toggle collapsed"
@@ -30,12 +38,13 @@
 		<!-- 게시판 제목 이름 옆에 나타나는 메뉴 영역 -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li><a href="gamePlay.jsp">게임플레이</a></li>
-				<li><a href="bbs.jsp">자유게시판</a></li>
+				<li ><a href="gamePlay.jsp">게임플레이</a></li>
+				<li class="active"><a href="bbs.jsp">자유게시판</a></li>
 				<li><a href="ranking.jsp">랭킹</a></li>
 				<li><a href="management.jsp">관리페이지</a></li>
 			</ul>
 			<!-- 헤더 우측에 나타나는 드랍다운 영역 -->
+			<% if(userID == null){ %>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle"
@@ -48,30 +57,56 @@
 					</ul>
 				</li>
 			</ul>
-			
+			<%} else{ %>
+				<ul class="nav navbar-nav navbar-right">
+						<li><a href="logoutAction.jsp">로그아웃</a></li>
+					</ul>
+				</li>
+			</ul>
+			<%} %>
 		</div>
 	</nav>
 	<!-- 부트스트랩 참조 영역 -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
 	
-	<div class="container">		<!-- 하나의 영역 생성 -->
-		<div class="col-lg-offset-4 col-lg-4">	<!-- 영역 크기 -->
-			<!-- 점보트론은 특정 컨텐츠, 정보를 두드러지게 하기 위한 큰 박스 -->
-			<div class="jumbotron" style="padding-top: 20px;">
-				<form method="post" action="loginAction.jsp">
-					<h3 style="text-align: center;">로그인 화면</h3>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디" name="id" id="id" maxlength="20">
-					</div>
-					 <div class="form-group">
-						<input type="password" class="form-control" placeholder="비밀번호" name="password" maxlength="20">
-					</div>
-					<input type="submit" class="btn btn-primary form-control" name="submit" value="로그인">
-					<input type="submit" class="btn btn-secondary btn-block" name="submit" value="회원가입">
-				</form>
-			</div>
-		</div>	
-	</div>
+<div class="container" id="wrap">
+    	<h2>자유게시판</h2>
+    	<div class="row">
+    	<table class="table table-striped">
+    		
+    		<tr>
+    			<th>글번호</th>
+    			<th>글제목</th>
+    			<th>작성자</th>
+    			<th>작성날짜</th>
+    			<th>조회수</th>
+    		</tr>
+    		<tr>
+						<!-- 테스트 코드 -->
+						<td>1</td>
+						<td>안녕하세요</td>
+						<td>홍길동</td>
+						<td>2020-07-13</td>
+						<td>1</td>
+			</tr>
+			<c:forEach var="posting" items="${list}">
+				<tr>
+					<td>${posting.num }</td>
+					<td>${posting.title }</td>
+					<td>${posting.name }</td>
+					<td>${posting.writeDate }</td>
+					<td>${posting.readCount }</td>
+				</tr>
+			</c:forEach>
+			
+			<tr>
+    			<td colspan="5" style="border:white;text-align:right;">
+    			<a class="btn btn-primary pull-right" href="write.jsp">글 작성하기</a></td>
+    		</tr>
+    	</table>
+    	</div>
+    </div>
+
 </body>
 </html>
