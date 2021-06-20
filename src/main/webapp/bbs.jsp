@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="java.io.PrintWriter" %>
+<%@ page import="com.baek.dao.*" %>
+<%@ page import="com.baek.model.*" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,10 +11,17 @@
 <title>게시판 목록</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- 뷰포트 -->
-<meta name="viewport" content="width=device-width" initial-scale="1">
+<meta name="viewport" content="width=device-width , initial-scale=1">
 <!-- 스타일시트 참조  -->
-<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="https://bootswatch.com/4/cyborg/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="css/cyborg.css" type="text/css">
 
+<style type="text/css">
+ a , a:hover{
+ color: #ffffff;
+ text_decoration: none;
+}
+</style>
 </head>
 <body>
 
@@ -19,92 +30,78 @@ String userID =null;
 if(session.getAttribute("userID") != null){
 	userID = (String)session.getAttribute("userID");
 }
-%>
 
-<nav class="navbar navbar-default"> <!-- 네비게이션 -->
-		<div class="navbar-header"> 	<!-- 네비게이션 상단 부분 -->
-			<!-- 네비게이션 상단 박스 영역 -->
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-				aria-expanded="false">
-				<!-- 이 삼줄 버튼은 화면이 좁아지면 우측에 나타난다 -->
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<!-- 상단 바에 제목이 나타나고 클릭하면 main 페이지로 이동한다 -->
-			<a class="navbar-brand" href="main.jsp">겜방</a>
-		</div>
-		<!-- 게시판 제목 이름 옆에 나타나는 메뉴 영역 -->
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li ><a href="gamePlay.jsp">게임플레이</a></li>
-				<li class="active"><a href="bbs.jsp">자유게시판</a></li>
-				<li><a href="ranking.jsp">랭킹</a></li>
-				<li><a href="management.jsp">관리페이지</a></li>
-			</ul>
-			<!-- 헤더 우측에 나타나는 드랍다운 영역 -->
-			<% if(userID == null){ %>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false">접속하기<span class="caret"></span></a>
-					<!-- 드랍다운 아이템 영역 -->	
-					<ul class="dropdown-menu">
-						<li class="active"><a href="login.jsp">로그인</a></li>
-						<li><a href="register.jsp">회원가입</a></li>
-					</ul>
-				</li>
-			</ul>
-			<%} else{ %>
-				<ul class="nav navbar-nav navbar-right">
-						<li><a href="logoutAction.jsp">로그아웃</a></li>
-					</ul>
-				</li>
-			</ul>
-			<%} %>
-		</div>
-	</nav>
+int pageNumber = 1; //기본은 1 페이지를 할당
+// 만약 파라미터로 넘어온 오브젝트 타입 'pageNumber'가 존재한다면
+// 'int'타입으로 캐스팅을 해주고 그 값을 'pageNumber'변수에 저장한다
+if(request.getParameter("pageNumber") != null){
+	pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+}
+%>
+	<jsp:include page="menu.jsp"/>
 	<!-- 부트스트랩 참조 영역 -->
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="js/bootstrap.js"></script>
+	<script src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
 	
-<div class="container" id="wrap">
+	
+<div class="container mt-4" id="wrap">
     	<h2>자유게시판</h2>
     	<div class="row">
-    	<table class="table table-striped">
-    		
-    		<tr>
-    			<th>글번호</th>
-    			<th>글제목</th>
-    			<th>작성자</th>
-    			<th>작성날짜</th>
-    			<th>조회수</th>
-    		</tr>
-    		<tr>
-						<!-- 테스트 코드 -->
-						<td>1</td>
-						<td>안녕하세요</td>
-						<td>홍길동</td>
-						<td>2020-07-13</td>
-						<td>1</td>
-			</tr>
-			<c:forEach var="posting" items="${list}">
-				<tr>
-					<td>${posting.num }</td>
-					<td>${posting.title }</td>
-					<td>${posting.name }</td>
-					<td>${posting.writeDate }</td>
-					<td>${posting.readCount }</td>
-				</tr>
-			</c:forEach>
+    	<table class="table table-striped mt-4" style="text-align: center; border: 1px solid #dddddd">
+				<thead>
+					<tr class="table-secondary">
+						<th style="text-align: center;">번호</th>
+						<th style="text-align: center;">제목</th>
+						<th style="text-align: center;">작성자</th>
+						<th style="text-align: center;">작성일</th>
+						<th style="text-align: center;">조회수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+						BbsDAO bbsDAO = new BbsDAO(); // 인스턴스 생성
+						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+						for(int i = 0; i < list.size(); i++){
+					%>
+					<tr>
+						<td><%= list.get(i).getBbsID() %></td>
+						<!-- 게시글 제목을 누르면 해당 글을 볼 수 있도록 링크를 걸어둔다 -->
+						<td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>">
+							<%= list.get(i).getBbsTitle().replaceAll(" ", "&nbsp;")
+									.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>") %></a></td>
+						<td><%= list.get(i).getUserID() %></td>
+						<td><%= list.get(i).getBbsDate().substring(0, 11) + list.get(i).getBbsDate().substring(11, 13) + "시"
+							+ list.get(i).getBbsDate().substring(14, 16) + "분" %></td>
+							<td><%= list.get(i).getViews() %></td>
+					</tr>
+					<%
+						}
+					%>
+				</tbody>
+			</table>
+			<!-- 페이징 처리 영역 -->
 			
-			<tr>
-    			<td colspan="5" style="border:white;text-align:right;">
-    			<a class="btn btn-primary pull-right" href="write.jsp">글 작성하기</a></td>
-    		</tr>
-    	</table>
+			<div class="container">
+    			<div class="row">
+        			<div class="col-sm-2">
+        			<%
+					if(pageNumber != 1){
+					%>
+					<a href="bbs.jsp?pageNumber=<%=pageNumber - 1 %>"
+					class="btn btn-success btn-arraw-left">이전</a><%}%>
+					</div>
+        			<div class="col-sm-2">
+        			<%
+						if(bbsDAO.nextPage(pageNumber + 1)){
+					%>
+				<a href="bbs.jsp?pageNumber=<%=pageNumber + 1 %>"
+					class="btn btn-success btn-arraw-left">다음</a><%}%>
+					</div>
+       			 	<div class="col-sm-2 ml-auto"><a class="btn btn-primary" href="write.jsp">글 작성하기</a></div>
+   		 		</div>
+
+    			
+    		</div>
     	</div>
     </div>
 

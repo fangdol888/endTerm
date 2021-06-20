@@ -69,7 +69,20 @@ public class UserDao {
 		return -1; //오류
 	}
 	
-	public int isAdmin(String userid) { //관리자인지 확인
+	public int updateAuth(String userId, int auth) {
+		String sql = "update admin set authority=? where id=?";
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, auth);
+			pstmt.setString(2, userId);
+			return pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; //error
+	}
+	
+	public boolean isAdmin(String userid) { //관리자인지 확인
 		String sql = "SELECT authority FROM admin WHERE id = ? ";
 		try {
 			pstmt = connection.prepareStatement(sql);
@@ -77,18 +90,34 @@ public class UserDao {
 			
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
-				if(rs.getInt(1) == 1) {
-					return 1; //관리자
+				if(rs.getInt(1) == 1 || rs.getInt(1) == 2) {
+					return true; //관리자
 				}else {
-					return 0; //일반
+					return false; //일반
 				}
 			}
-			return -1; //데이터베이스 내의 권한 없음
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return -2; //오류
+		return false; //오류
 	}
+	
+	public int getAuth(String userid) {
+		String sql = "SELECT authority FROM admin WHERE id = ? ";
+		try {
+			pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, userid);
+			
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; //오류
+	}
+	
 	public int deleteAuth(String userid) {
 		String sql = "delete from admin where id=?";
 		try {

@@ -43,7 +43,7 @@
 				PrintWriter script = response.getWriter();
 				dao.authorization(user, 0);
 				session.setAttribute("userID", user.getId());
-				session.setAttribute("auth", dao.isAdmin(user.getId()));
+				session.setAttribute("auth", dao.getAuth(user.getId()));
 				script.println("<script>");
 				script.println("alert('회원가입 성공')");
 				script.println("location.href='main.jsp'");

@@ -3,9 +3,7 @@ td{
     width: 10px;
     border-radius: 3px;
 }
-body{
-    background-color: #EEEEEE;
-}
+
 #score{
     height: 40px;
     width: 463px;
@@ -21,6 +19,11 @@ body{
     font-weight: bold;
     text-align: center;
     background-color: #EEEEEE;
+}
+
+#game{
+	width: 480px;
+	background-color: #EEEEEE;
 }
 
 #retry{

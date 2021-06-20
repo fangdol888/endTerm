@@ -38,10 +38,9 @@
 		int result = userDAO.login(user.getId(), user.getPassword());
 		if(result == 1){
 			session.setAttribute("userID", user.getId());
-			session.setAttribute("auth", userDAO.isAdmin(user.getId()));
+			session.setAttribute("auth", userDAO.getAuth(user.getId()));
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
-			//script.println("alert('로그인 성공')");
 			script.println("location.href='main.jsp'");
 			script.println("</script>");
 		}else if(result == 0){

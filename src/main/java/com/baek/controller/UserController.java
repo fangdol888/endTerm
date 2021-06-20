@@ -23,21 +23,14 @@ public class UserController extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+		doPost(request, response);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		User user = new User();
+		User user = new User(); 
 		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
 		user.setId(request.getParameter("id"));
 		user.setGender(request.getParameter("gender"));
 		user.setName(request.getParameter("name"));
@@ -45,7 +38,7 @@ public class UserController extends HttpServlet {
 		UserDao ud = new UserDao();
 		ud.register(user);
 		request.getRequestDispatcher("registerAction.jsp").forward(request,response);
-		//doGet(request, response);
+
 	}
 
 }

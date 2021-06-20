@@ -38,7 +38,7 @@ function init(){
 
 // 보드판 표시
 function drawBoard(){
-    var boardTag = "<table border=0>";
+    var boardTag = "<table class='container ml-2 mr-2 mt-4' border=0>";
     for(var i=0;i<MY;i++){
         boardTag += "<tr>";
         for(var j=0;j<MX;j++)
@@ -146,7 +146,12 @@ function scoring(){
     document.getElementById("score").innerHTML = score;
 }
 function gameover(){
+ 	var frm = document.getElementById('frm');
+    var scv = document.getElementById('scoreValue');
     alert("[Game Over]\nScore: "+score);
+    scv.value = score;
+    frm.submit();
+    clearInterval(keepMove);
     init();
-    location.reload();
+    //location.reload();
 }
